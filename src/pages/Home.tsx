@@ -14,8 +14,8 @@ export default function main(){
         <Nav/>
         <div className='font-main text-text-secondary bg-bg-main flex flex-col gap-10'>
             <div id="hearo" className='flex w-full h-150'> 
-                <img src={Image2} alt="" className='w-600 object-cover' />
-                <div className=" bg-bg-main [clip-path:polygon(20%_0%,100%_0%,100%_100%,0%_100%)] w-full -ml-70 flex items-center justify-center p-10 flex-col gap-5">
+                <img src={Image2} alt="" className='flex-5 object-cover' />
+                <div className=" bg-bg-main [clip-path:polygon(20%_0%,100%_0%,100%_100%,0%_100%)] flex-3 -ml-70 flex items-center justify-center p-10 flex-col gap-5">
                     <h1 className='text-5xl font-bold font-main text-primary'>Ves3 Test Store</h1>
                     <p className='-mt-4'>-Furture of Devs-</p>
                     <div className='flex gap-5'>
