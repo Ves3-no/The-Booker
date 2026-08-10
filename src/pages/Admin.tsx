@@ -12,12 +12,15 @@ import Products from '../comps/AdminProducts'
 import Services from '../comps/AdminServices'
 import WorkerCalendar from '../comps/AdminWorkerCalendar'
 import Workers from '../comps/AdminWorkers'
+import { useLocation } from "react-router-dom"
 
 export default function main(){
     const { page } = useParams();
     const thepage = page as pages
     const navigate = useNavigate()
-    const { IsAdmin, IsWorker } = useAppContext()
+    const { IsAdmin, IsWorker, setLocation } = useAppContext()
+    const location = useLocation()
+    setLocation(location.pathname)
     useEffect(()=>{
         if(IsAdmin == false && IsWorker == false){
             navigate('/auth')

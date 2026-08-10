@@ -55,7 +55,8 @@ export type Custumer = {
     mail: string;
     phone: number;
     name: string;
-    company_id: string
+    company_id: string;
+    is_active: boolean;
 }
 export type Product_booking = {
     id: string; 

@@ -6,7 +6,7 @@ import CompanyId from "../CompanyId"
 
 export default function main(){
     const navigate = useNavigate()
-    const { setIsAdmin, setIsWorker, IsAdmin, IsWorker } = useAppContext()
+    const { setIsAdmin, setIsWorker, IsAdmin, IsWorker, location } = useAppContext()
     useEffect(()=>{
         if(IsAdmin == true && IsWorker == true){
             navigate('/Admin')
@@ -40,7 +40,7 @@ export default function main(){
             if(isUserWorker == true){
                 setIsWorker(true)
                 console.log("this user is a worker")
-                navigate("/Admin/Home")
+                navigate(location ? `/${location}` : "/Admin/Home")
             } else{
                 setIsWorker(false)
                 navigate("/")
