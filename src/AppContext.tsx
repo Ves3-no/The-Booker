@@ -39,7 +39,7 @@ export function AppProvider({ children }: PropsWithChildren) {
                 .select()
                 .eq('company_id', CompanyId)
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             const res = data as Product[]
@@ -51,7 +51,7 @@ export function AppProvider({ children }: PropsWithChildren) {
                 .select()
                 .eq('company_id', CompanyId)
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             const res = data as Service[]
@@ -63,7 +63,7 @@ export function AppProvider({ children }: PropsWithChildren) {
                 .select()
                 .eq('company_id', CompanyId)
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             const res = data as Worker[]
@@ -75,7 +75,7 @@ export function AppProvider({ children }: PropsWithChildren) {
                 .select()
                 .eq('company_id', CompanyId)
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             const res = data as Worker_calendar[]
@@ -87,7 +87,7 @@ export function AppProvider({ children }: PropsWithChildren) {
                 .select()
                 .eq('company_id', CompanyId)
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             const res = data as worker_services[]
@@ -96,7 +96,7 @@ export function AppProvider({ children }: PropsWithChildren) {
         async function GetUser() {
             const { data: { user }, error } = await supabase.auth.getUser()
             if(error){
-                console.log(error)
+                console.log(error.message)
                 return
             }
             setUser(user as User)
