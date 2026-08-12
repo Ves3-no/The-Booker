@@ -35,6 +35,7 @@ export default function main(){
                             <th className="border-r border-text-secondary">Name</th>
                             <th className="border-x border-text-secondary">Role</th>
                             <th className="border-x border-text-secondary">Id</th>
+                            <th className="border-x border-text-secondary">Services</th>
                             <th className="order-x border-text-secondary">Auto Accept</th>
                             <th className="border-l border-text-secondary">Promote</th>
                         </tr>

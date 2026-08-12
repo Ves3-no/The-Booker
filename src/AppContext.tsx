@@ -19,6 +19,7 @@ type typeappcontext = {
     Bookings: Booking[] | undefined;
     setBookings: Dispatch<SetStateAction<Booking[] | undefined>>;
     Custumers: Custumer[] | undefined;
+    setServices: Dispatch<SetStateAction<Service[] | undefined>>
 }
 
 const AppContext = createContext<typeappcontext | null>(null);
@@ -142,7 +143,7 @@ export function AppProvider({ children }: PropsWithChildren) {
         }
     }, [])
     return (
-        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation, Bookings, setBookings, Custumers}}>
+        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation, Bookings, setBookings, Custumers, setServices}}>
         {children}
         </AppContext.Provider>
     );

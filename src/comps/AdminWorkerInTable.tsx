@@ -1,14 +1,20 @@
 import type { Service, Worker, worker_services } from "../types"
 import { supabase } from "../supabase"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CompanyId from "../CompanyId"
+import AdminWorkerServicePopup from "./AdminWorkerServicePopup.tsx"
 export default function main({index, worker, checkIfAdmin, Services, Worker_Services}: {index: number, worker: Worker, checkIfAdmin: any, Services: Service[] | undefined, Worker_Services: worker_services[] | undefined}){
     const [workerRole, setWorkerRole] = useState<string>(worker.role?? "")
     const [popup, setPopup] = useState<boolean>(false)
     const [servicePopup, setServicePopup] = useState<boolean>(false)
-    async function ToggleServices(){
-
-    }
+    const [workerInQuestionServices, setWorkerInQuestionServices] = useState<Worker | undefined>()
+    const [workersServices, setWorkersServices] = useState<Service[] | undefined>(undefined)
+    useEffect(()=>{
+        const results = Worker_Services?.filter(service => service.worker_id === worker.id);
+        const results2 = Services? results?.flatMap(result => Services.filter(service => service.id === result.service_id)): undefined
+        setWorkersServices(results2)
+    }, [Worker_Services])
+    
     async function ToggleAutoAccept(checked: boolean, workerID: string){
         const { error } = await supabase
             .from('Workers')
@@ -47,7 +53,7 @@ export default function main({index, worker, checkIfAdmin, Services, Worker_Serv
             <th className="border-r border-text-secondary">{worker.name}</th>
             <th className="border-x border-text-secondary"><input className="field-sizing-content" type="text" value={workerRole} onChange={(e)=> {changeWorkerRole(e.currentTarget.value, worker.id), setWorkerRole(e.currentTarget.value)}}/></th>
             <th className="border-x border-text-secondary">{worker.id}</th>
-            <th className="border-x"></th>
+            <th className="border-x"><button onClick={()=> {setServicePopup(true), setWorkerInQuestionServices(worker)}}>{workersServices?.length? workersServices.map(service => service.name).join(", "): "Add a Service"}</button></th>
             <th className="border-x border-text-secondary p-1"><input type="checkbox" name="auto_accept" defaultChecked={Boolean(worker.auto_accept)} onClick={(e)=> {ToggleAutoAccept(e.currentTarget.checked, worker.id)}}/></th>
             {checkIfAdmin ? <th className="border-l border-text-secondary">This is an Admin</th>:<th className="border-l border-text-secondary p-1"><button className="px-2 py-1 rounded-lg bg-text-primary text-bg-surface hover:rounded-xs transition-all hover:shadow-2xl" onClick={()=> setPopup(true)}>Promote to Admin</button></th>}
         </tr>
@@ -61,11 +67,6 @@ export default function main({index, worker, checkIfAdmin, Services, Worker_Serv
                 </div>
             </div>
         </div>: <></>}
-        {servicePopup == true ? 
-        <div id="servicePopup" className="flex flex-col h-screen w-full bg-black/85 absolute top-0 bottom-0 left-0 justify-center items-center">
-            <div className="bg-bg-surface rounded-lg w-150 p-8 flex flex-col justify-center items-center gap-5 -translate-y-16">
-                
-            </div>
-        </div>: <></>}
+        {servicePopup == true ? <AdminWorkerServicePopup Services={Services} workerInQuestionServices={workerInQuestionServices} setWorkerInQuestionServices={setWorkerInQuestionServices} setServicePopup={setServicePopup}/>: <></>}
         </>)
 }
