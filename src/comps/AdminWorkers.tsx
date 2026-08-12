@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import type { Admin } from "../types"
 
 export default function main(){
-    const { Workers } = useAppContext()
+    const { Workers, Services, Worker_Services } = useAppContext()
     const [admins, setAdmins] = useState<Admin[]>()
     function checkIfAdmin(workerID: string){
         return admins?.some((admin) => admin.worker_id === workerID)
@@ -45,7 +45,9 @@ export default function main(){
                                 <AdminWorkerInTable
                                 key={worker.id}
                                 worker={worker}
+                                Services={Services}
                                 index={index}
+                                Worker_Services={Worker_Services}
                                 checkIfAdmin={checkIfAdmin(worker.id)}
                                 />
                             )

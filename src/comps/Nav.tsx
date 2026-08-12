@@ -6,6 +6,7 @@ export default function app(){
         <nav className='flex w-full sticky top-0  flex-row px-50 justify-between items-center h-15 bg-bg-main shadow-2xl z-10'>
             <Link to="/" className='text-text-primary text-3xl font-extrabold'>Ves3</Link>
             <div className='flex gap-5 items-center'>
+            <Link to={`/Admin`} className='p-1 rounded-xl border border-text-primary text-text-primary w-30 text-md hover:rounded-xs transition-all hover:shadow-2xl'>Admin DB</Link>
             <Link to={`/Login/${location}`} className='p-1 rounded-xl border border-text-primary text-text-primary w-30 text-md hover:rounded-xs transition-all hover:shadow-2xl'>Login</Link>
             <a href="https://github.com/ves3-no">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28 " fill="currentColor" className="bi bi-github" viewBox="0 0 16 16">
