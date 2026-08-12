@@ -38,21 +38,25 @@ export default function main(){
             <h1 className="text-primary font-bold text-3xl">Custumers</h1>
             <div className="overflow-hidden rounded-xl border border-text-secondary shadow-sm">
                 <table className="w-full p-3 ">
-                    <tr className="">
-                        <th className="border-r border-text-secondary">Name</th>
-                        <th className="border-x border-text-secondary">Mail</th>
-                        <th className="border-x border-text-secondary">Id</th>
-                        <th className="border-l border-text-secondary">Promote</th>
-                    </tr>
-                    {custumers?.map((custumer, index)=>{
-                        return(
-                        <tr key={index} className="border-t border-text-secondary">
-                            <th className="border-r border-text-secondary">{custumer.name}</th>
-                            <th className="border-x border-text-secondary">{custumer.mail}</th>
-                            <th className="border-x border-text-secondary">{custumer.custumer_id}</th>
-                            <th className="border-l border-text-secondary p-1"><button className="px-2 py-1 rounded-lg bg-text-primary text-bg-surface hover:rounded-xs transition-all hover:shadow-2xl" onClick={()=> {setPopup(true), setUserInTarget(custumer)}}>Promote to Worker</button></th>
-                        </tr>)
-                    })}
+                    <thead>
+                        <tr className="">
+                            <th className="border-r border-text-secondary">Name</th>
+                            <th className="border-x border-text-secondary">Mail</th>
+                            <th className="border-x border-text-secondary">Id</th>
+                            <th className="border-l border-text-secondary">Promote</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {custumers?.map((custumer, index)=>{
+                            return(
+                            <tr key={index} className="border-t border-text-secondary">
+                                <th className="border-r border-text-secondary">{custumer.name}</th>
+                                <th className="border-x border-text-secondary">{custumer.mail}</th>
+                                <th className="border-x border-text-secondary">{custumer.custumer_id}</th>
+                                <th className="border-l border-text-secondary p-1"><button className="px-2 py-1 rounded-lg bg-text-primary text-bg-surface hover:rounded-xs transition-all hover:shadow-2xl" onClick={()=> {setPopup(true), setUserInTarget(custumer)}}>Promote to Worker</button></th>
+                            </tr>)
+                        })}
+                    </tbody>
                 </table>
             </div>
         </div>

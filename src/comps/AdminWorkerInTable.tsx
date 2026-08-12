@@ -1,7 +1,8 @@
 import type { Worker } from "../types"
 import { supabase } from "../supabase"
 import { useState } from "react"
-export default function main({index, worker, checkIfAdmin, PromoteToAdmin}: {index: number, worker: Worker, checkIfAdmin: any, PromoteToAdmin: any}){
+import CompanyId from "../CompanyId"
+export default function main({index, worker, checkIfAdmin}: {index: number, worker: Worker, checkIfAdmin: any}){
     const [workerRole, setWorkerRole] = useState<string>(worker.role?? "")
     const [popup, setPopup] = useState<boolean>(false)
     async function ToggleAutoAccept(checked: boolean, workerID: string){
@@ -24,6 +25,18 @@ export default function main({index, worker, checkIfAdmin, PromoteToAdmin}: {ind
             return
         }
     }
+    async function PromoteToAdmin(workerId : string){
+            if(workerId != "" && workerId){
+                const { error } = await supabase.rpc('promote_to_admin', {
+                    p_company_id: CompanyId,
+                    p_worker_id: workerId
+                })
+                if(error){
+                    console.log(error.message)
+                    return
+                }
+            }
+        }
     return(
         <>
         <tr key={index} className="border-t border-text-secondary">
@@ -39,7 +52,7 @@ export default function main({index, worker, checkIfAdmin, PromoteToAdmin}: {ind
                 <h1 className="text-text-primary text-2xl font-semibold">Are You sure you want to promote this worker to an Admin?</h1>
                 <div className="flex flex-row gap-10">
                     <button className='p-2 rounded-xl bg-text-primary text-bg-main w-30 text-md hover:rounded-xs transition-all hover:shadow-2xl' onClick={()=> {setPopup(false)}}>Cancel</button>
-                    <button className='p-2 rounded-xl border border-text-primary text-text-primary w-30 text-md hover:rounded-xs transition-all hover:shadow-2xl' onClick={()=> {PromoteToAdmin(), setPopup(false)}}>Yes</button>
+                    <button className='p-2 rounded-xl border border-text-primary text-text-primary w-30 text-md hover:rounded-xs transition-all hover:shadow-2xl' onClick={()=> {PromoteToAdmin(worker.id), setPopup(false)}}>Yes</button>
                 </div>
             </div>
         </div>: <></>}

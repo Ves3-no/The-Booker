@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type PropsWithChildren, type Dispatch, type SetStateAction } from 'react';
 import { supabase } from './supabase';
-import { type Product, type Service, type Worker, type worker_services, type Worker_calendar, type User } from './types';
+import { type Product, type Service, type Worker, type worker_services, type Worker_calendar, type User, type Booking, type Custumer } from './types';
 import CompanyId from './CompanyId';
 
 type typeappcontext = {
@@ -15,7 +15,10 @@ type typeappcontext = {
     setIsWorker: Dispatch<SetStateAction<boolean>>;
     setIsAdmin: Dispatch<SetStateAction<boolean>>;
     location: string;
-    setLocation: Dispatch<SetStateAction<string>>
+    setLocation: Dispatch<SetStateAction<string>>;
+    Bookings: Booking[] | undefined;
+    setBookings: Dispatch<SetStateAction<Booking[] | undefined>>;
+    Custumers: Custumer[] | undefined;
 }
 
 const AppContext = createContext<typeappcontext | null>(null);
@@ -30,6 +33,8 @@ export function AppProvider({ children }: PropsWithChildren) {
     const [location, setLocation] = useState<string>("")
     const [IsWorker, setIsWorker] = useState<boolean>(false)
     const [IsAdmin, setIsAdmin] = useState<boolean>(false)
+    const [Bookings, setBookings] = useState<Booking[] | undefined>()
+    const [Custumers, setCustumers] = useState<Custumer[] | undefined>()
 
 
     useEffect(() =>{
@@ -108,8 +113,36 @@ export function AppProvider({ children }: PropsWithChildren) {
         getWorker_Services()
         GetUser()
     }, [])
+    useEffect(()=>{
+        if(IsAdmin || IsWorker){
+            async function getBookings(){
+                const { data, error } = await supabase
+                    .from('custumers')
+                    .select()
+                    .eq('company_id', CompanyId)
+                if(error){
+                    console.log(error)
+                    return
+                }
+                setBookings(data)
+            }
+            async function getCustumers(){
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .select()
+                    .eq('company_id', CompanyId)
+                if(error){
+                    console.log(error)
+                    return
+                }
+                setCustumers(data)
+            }
+            getBookings()
+            getCustumers()
+        }
+    }, [])
     return (
-        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation}}>
+        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation, Bookings, setBookings, Custumers}}>
         {children}
         </AppContext.Provider>
     );

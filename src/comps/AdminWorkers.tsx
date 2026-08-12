@@ -8,16 +8,6 @@ import type { Admin } from "../types"
 export default function main(){
     const { Workers } = useAppContext()
     const [admins, setAdmins] = useState<Admin[]>()
-    async function PromoteToAdmin(workerId : string){
-        const { error } = await supabase.rpc('promote_to_admin', {
-            p_company_id: CompanyId,
-            p_worker_id: workerId
-        })
-        if(error){
-            console.log(error.message)
-            return
-        }
-    }
     function checkIfAdmin(workerID: string){
         return admins?.some((admin) => admin.worker_id === workerID)
     }
@@ -40,24 +30,27 @@ export default function main(){
             <h1 className="text-primary font-bold text-3xl">Workers</h1>
             <div className="overflow-hidden rounded-xl border border-text-secondary shadow-sm">
                 <table className="w-full p-3 ">
-                    <tr className="">
-                        <th className="border-r border-text-secondary">Name</th>
-                        <th className="border-x border-text-secondary">Role</th>
-                        <th className="border-x border-text-secondary">Id</th>
-                        <th className="order-x border-text-secondary">Auto Accept</th>
-                        <th className="border-l border-text-secondary">Promote</th>
-                    </tr>
-                    {Workers?.map((worker, index) => {
-                        return (
-                            <AdminWorkerInTable
-                            key={worker.id}
-                            worker={worker}
-                            index={index}
-                            checkIfAdmin={checkIfAdmin(worker.id)}
-                            PromoteToAdmin={PromoteToAdmin(worker.id)}
-                            />
-                        )
-                    })}
+                    <thead>
+                        <tr className="">
+                            <th className="border-r border-text-secondary">Name</th>
+                            <th className="border-x border-text-secondary">Role</th>
+                            <th className="border-x border-text-secondary">Id</th>
+                            <th className="order-x border-text-secondary">Auto Accept</th>
+                            <th className="border-l border-text-secondary">Promote</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Workers?.map((worker, index) => {
+                            return (
+                                <AdminWorkerInTable
+                                key={worker.id}
+                                worker={worker}
+                                index={index}
+                                checkIfAdmin={checkIfAdmin(worker.id)}
+                                />
+                            )
+                        })}
+                    </tbody>
                 </table>
             </div>
         </div>
