@@ -25,6 +25,7 @@ export default function main(){
         const { error } = await supabase.rpc('promote_user', {
             p_company_id: CompanyId,
             p_target_user_id: userInTarget?.custumer_id,
+            p_name: userInTarget?.name,
             p_make_admin: true
         })
         if(error){
