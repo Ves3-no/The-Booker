@@ -1,26 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { supabase } from "../supabase"
 import CompanyId from "../CompanyId"
 import type { Custumer } from "../types"
+import { useAppContext } from "../AppContext"
 
 export default function main(){
-    const [custumers, setCustumers] = useState<Custumer[] | undefined>()
+    const {Custumers, setRefreshTrigger} = useAppContext()
     const [popup, setPopup] = useState<boolean>(false)
     const [userInTarget, setUserInTarget] = useState<Custumer | undefined>()
-    useEffect(()=>{
-        async function getCustumers(){
-            const { data, error } = await supabase
-                .from('custumers')
-                .select()
-                .eq('company_id', CompanyId)
-            if(error){
-                console.log(error)
-                return
-            }
-            setCustumers(data as Custumer[])
-        }
-        getCustumers()
-    }, [])
     async function PromoteToWorker(){
         const { error } = await supabase.rpc('promote_user', {
             p_company_id: CompanyId,
@@ -32,6 +19,7 @@ export default function main(){
             console.log(error)
             return
         }
+        setRefreshTrigger(prev => prev + 1);
     }
     return(<>
         <div className="flex flex-col p-5 w-full gap-8 font-main text-text-primary">
@@ -47,7 +35,7 @@ export default function main(){
                         </tr>
                     </thead>
                     <tbody>
-                        {custumers?.map((custumer, index)=>{
+                        {Custumers?.map((custumer, index)=>{
                             return(
                             <tr key={index} className="border-t border-text-secondary">
                                 <th className="border-r border-text-secondary">{custumer.name}</th>

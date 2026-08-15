@@ -3,11 +3,14 @@ import { useAppContext } from "../AppContext"
 import CompanyId from "../CompanyId"
 import AdminWorkerInTable from './AdminWorkerInTable'
 import { useEffect, useState } from "react"
-import type { Admin } from "../types"
+import type { Admin, Worker } from "../types"
+import AdminWorkerServicePopup from "./AdminWorkerServicePopup.tsx"
 
 export default function main(){
     const { Workers, Services, Worker_Services } = useAppContext()
     const [admins, setAdmins] = useState<Admin[]>()
+    const [servicePopup, setServicePopup] = useState<boolean>(false)
+    const [workerInQuestionServices, setWorkerInQuestionServices] = useState<Worker | undefined>()
     function checkIfAdmin(workerID: string){
         return admins?.some((admin) => admin.worker_id === workerID)
     }
@@ -50,12 +53,15 @@ export default function main(){
                                 index={index}
                                 Worker_Services={Worker_Services}
                                 checkIfAdmin={checkIfAdmin(worker.id)}
+                                setWorkerInQuestionServices={setWorkerInQuestionServices}
+                                setServicePopup={setServicePopup}
                                 />
                             )
                         })}
                     </tbody>
                 </table>
             </div>
+            {servicePopup == true ? <AdminWorkerServicePopup Services={Services} workerInQuestionServices={workerInQuestionServices} setWorkerInQuestionServices={setWorkerInQuestionServices} setServicePopup={setServicePopup}/>: <></>}
         </div>
         </>)
 }

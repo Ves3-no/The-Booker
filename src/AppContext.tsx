@@ -20,11 +20,15 @@ type typeappcontext = {
     setBookings: Dispatch<SetStateAction<Booking[] | undefined>>;
     Custumers: Custumer[] | undefined;
     setServices: Dispatch<SetStateAction<Service[] | undefined>>
+    setRefreshTrigger: Dispatch<SetStateAction<number>>;
+    refreshTrigger: number;
 }
 
 const AppContext = createContext<typeappcontext | null>(null);
 
 export function AppProvider({ children }: PropsWithChildren) {
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
     const [Products, setProducts] = useState<Product[] | undefined>()
     const [Services, setServices] = useState<Service[] | undefined>()
     const [Workers, setWorkers] = useState<Worker[] | undefined>()
@@ -107,43 +111,41 @@ export function AppProvider({ children }: PropsWithChildren) {
             }
             setUser(user as User)
         }
+        async function getBookings(){
+            const { data, error } = await supabase
+                .from('bookings')
+                .select()
+                .eq('company_id', CompanyId)
+            if(error){
+                console.log(error)
+                return
+            }
+            setBookings(data)
+        }
+        async function getCustumers(){
+            const { data, error } = await supabase
+                .from('custumers')
+                .select()
+                .eq('company_id', CompanyId)
+            if(error){
+                console.log(error)
+                return
+            }
+            setCustumers(data)
+        }
         getProducts()
         getWorkers()
         getServices()
         getWorker_Calendars()
         getWorker_Services()
         GetUser()
-    }, [])
-    useEffect(()=>{
         if(IsAdmin || IsWorker){
-            async function getBookings(){
-                const { data, error } = await supabase
-                    .from('custumers')
-                    .select()
-                    .eq('company_id', CompanyId)
-                if(error){
-                    console.log(error)
-                    return
-                }
-                setBookings(data)
-            }
-            async function getCustumers(){
-                const { data, error } = await supabase
-                    .from('bookings')
-                    .select()
-                    .eq('company_id', CompanyId)
-                if(error){
-                    console.log(error)
-                    return
-                }
-                setCustumers(data)
-            }
             getBookings()
             getCustumers()
         }
-    }, [])
+    }, [refreshTrigger])
     return (
-        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation, Bookings, setBookings, Custumers, setServices}}>
+        <AppContext.Provider value={{Products, Services, Workers, Worker_calendars, Worker_Services, User, IsWorker, IsAdmin, setIsWorker, setIsAdmin, location, setLocation, Bookings, setBookings, Custumers, setServices, setRefreshTrigger, refreshTrigger}}>
         {children}
         </AppContext.Provider>
     );

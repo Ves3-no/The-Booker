@@ -1,13 +1,11 @@
 import type { Service, Worker, worker_services } from "../types"
+import { type Dispatch, type SetStateAction } from "react";
 import { supabase } from "../supabase"
 import { useEffect, useState } from "react"
 import CompanyId from "../CompanyId"
-import AdminWorkerServicePopup from "./AdminWorkerServicePopup.tsx"
-export default function main({index, worker, checkIfAdmin, Services, Worker_Services}: {index: number, worker: Worker, checkIfAdmin: any, Services: Service[] | undefined, Worker_Services: worker_services[] | undefined}){
+export default function main({index, worker, checkIfAdmin, Services, Worker_Services, setServicePopup, setWorkerInQuestionServices}: {index: number, worker: Worker, checkIfAdmin: any, Services: Service[] | undefined, Worker_Services: worker_services[] | undefined, setWorkerInQuestionServices: Dispatch<SetStateAction<Worker | undefined>> , setServicePopup: Dispatch<SetStateAction<boolean>>}){
     const [workerRole, setWorkerRole] = useState<string>(worker.role?? "")
     const [popup, setPopup] = useState<boolean>(false)
-    const [servicePopup, setServicePopup] = useState<boolean>(false)
-    const [workerInQuestionServices, setWorkerInQuestionServices] = useState<Worker | undefined>()
     const [workersServices, setWorkersServices] = useState<Service[] | undefined>(undefined)
     useEffect(()=>{
         const results = Worker_Services?.filter(service => service.worker_id === worker.id);
@@ -67,6 +65,5 @@ export default function main({index, worker, checkIfAdmin, Services, Worker_Serv
                 </div>
             </div>
         </div>: <></>}
-        {servicePopup == true ? <AdminWorkerServicePopup Services={Services} workerInQuestionServices={workerInQuestionServices} setWorkerInQuestionServices={setWorkerInQuestionServices} setServicePopup={setServicePopup}/>: <></>}
         </>)
 }
