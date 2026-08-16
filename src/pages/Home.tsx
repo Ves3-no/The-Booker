@@ -7,6 +7,7 @@ import ProductCard from '../comps/ProductCard'
 import type { Product, Service } from '../types'
 import { useLocation } from 'react-router-dom'
 import ContactBgImage from '../Assets/pexels-cottonbro-6804068.jpg'
+import Footer from "../comps/Footer.tsx"
 export default function main(){
     const location = useLocation()
     const {Services, Products, setLocation} = useAppContext()
@@ -62,5 +63,6 @@ export default function main(){
                 </div>
             </div>
         </div>
+        <Footer/>
     </>)
 }
